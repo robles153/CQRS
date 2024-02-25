@@ -22,21 +22,11 @@ public class MembersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateMember([FromBody] CreateMemberCommand command)
     {
-        try
-        {
-
-            var member = await _mediator.Send(command);
-            return CreatedAtAction("GetMember", new { id = member.Id });
-        }
-        catch (Exception)
-        {
-            return BadRequest("Member not created");
-
-            throw;
-        }
-
+        var createdMember = await _mediator.Send(command);
+        return CreatedAtAction(nameof(GetMember), new { id = createdMember.Id }, createdMember);
 
     }
+
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMember(int id, UpdateMemberCommand command)
